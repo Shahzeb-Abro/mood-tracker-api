@@ -6,7 +6,7 @@ dotenv.config();
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("Hello World");
+  res.send("Deployment successful");
 });
 
 app.listen(process.env.PORT, () => {
