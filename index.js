@@ -1,7 +1,11 @@
 import express from "express";
 const app = express();
 import dotenv from "dotenv";
+import { connectDB } from "./utils/db.js";
+import "colors";
 dotenv.config();
+
+connectDB();
 
 app.use(express.json());
 
