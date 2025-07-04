@@ -19,6 +19,6 @@ npm install --yes
 
 # Restarting server
 echo "Restarting server"
-pm2 restart gymbuddies-api
+pm2 restart mood-tracker-api
 
 echo "Deployment Finished!"
