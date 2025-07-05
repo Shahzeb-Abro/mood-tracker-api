@@ -51,5 +51,18 @@ const moodSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+moodSchema.pre("save", function (next) {
+  const sleepHoursToSleepValue = {
+    "0-2 hours": 1,
+    "3-4 hours": 2,
+    "5-6 hours": 3,
+    "7-8 hours": 4,
+    "9+ hours": 5,
+  };
+
+  this.sleepValue = sleepHoursToSleepValue[this.sleepHours];
+  next();
+});
+
 const Mood = mongoose.model("Mood", moodSchema);
 export default Mood;

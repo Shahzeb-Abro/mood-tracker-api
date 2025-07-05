@@ -13,6 +13,7 @@ import cookieParser from "cookie-parser";
 
 import globalErrorHandler from "./controllers/error.controller.js";
 import authRoutes from "./routes/auth.routes.js";
+import moodRoutes from "./routes/mood.routes.js";
 
 app.use(passport.initialize());
 
@@ -30,12 +31,14 @@ app.set("view engine", "pug");
 connectDB();
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Deployment successful 456");
 });
 
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/moods", moodRoutes);
 
 app.use(globalErrorHandler);
 

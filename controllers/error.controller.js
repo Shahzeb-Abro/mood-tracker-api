@@ -12,14 +12,13 @@ const handleCastError = (err) => {
 };
 
 const handleDuplicateRecordDB = (err) => {
-  // const value = err.errmsg.match(/(["'])(\\?.)*?\1/)[0];
   const dupField = Object.keys(err.keyValue)[0];
 
   let message;
 
   if (dupField === "email")
-    message = `User with this email already exits. Please try another one.`;
-  else message = `Duplidate field value. Please use another value`;
+    message = `User with this email already exists. Please try another one.`;
+  else message = `Duplicate field value. Please use another value.`;
 
   return new AppError(message, 400);
 };
@@ -36,6 +35,7 @@ const sendProdError = (err, res) => {
       status: err.status,
       message: err.message,
       extra: undefined,
+      errors: err?.errors,
     });
   } else {
     console.error("ERROR 💥", err);
@@ -48,6 +48,8 @@ const sendProdError = (err, res) => {
 };
 
 const sendDevError = (err, res) => {
+  console.log(err);
+
   res.status(err.statusCode).json({
     status: err.status,
     message: err.message,
@@ -59,6 +61,8 @@ const sendDevError = (err, res) => {
 const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
   err.status = err.status || "error";
+
+  console.log("Global Error Handler", err);
 
   if (process.env.NODE_ENV === "development") {
     sendDevError(err, res);
