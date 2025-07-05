@@ -160,3 +160,19 @@ export const getAverageMoodAndSleepValue = catchAsync(
     });
   }
 );
+
+export const getMoodBetweenDates = catchAsync(async (req, res, next) => {
+  const { startDate, endDate } = req.query;
+
+  const startDateObj = new Date(startDate);
+  const endDateObj = new Date(endDate);
+
+  const moods = await Mood.find({
+    createdAt: { $gte: startDateObj, $lte: endDateObj },
+  });
+
+  res.status(200).json({
+    status: "success",
+    data: moods,
+  });
+});
