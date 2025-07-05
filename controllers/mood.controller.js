@@ -31,6 +31,7 @@ export const createMood = catchAsync(async (req, res, next) => {
     reflection,
     tags,
     sleepHours,
+    userId: req.user._id,
   });
   res.status(201).json({
     status: "success",
@@ -46,6 +47,7 @@ export const getTodaysMood = catchAsync(async (req, res, next) => {
 
   const todaysMood = await Mood.find({
     createdAt: { $gte: startOfDay, $lte: endOfDay },
+    userId: req.user._id,
   });
 
   res.status(200).json({
@@ -71,6 +73,7 @@ export const getAverageMoodAndSleepValue = catchAsync(
       {
         $match: {
           createdAt: { $lte: endOfDay },
+          userId: req.user._id,
         },
       },
       {
@@ -169,6 +172,7 @@ export const getMoodBetweenDates = catchAsync(async (req, res, next) => {
 
   const moods = await Mood.find({
     createdAt: { $gte: startDateObj, $lte: endDateObj },
+    userId: req.user._id,
   });
 
   res.status(200).json({
