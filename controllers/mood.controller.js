@@ -12,6 +12,7 @@ export const createMood = catchAsync(async (req, res, next) => {
 
   const todaysMood = await Mood.find({
     createdAt: { $gte: startOfDay, $lte: endOfDay },
+    userId: req.user._id,
   });
 
   if (todaysMood.length > 0) {

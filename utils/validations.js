@@ -2,10 +2,10 @@ import { z } from "zod";
 
 export const moodSchema = z.object({
   mood: z.enum(["Very Happy", "Happy", "Neutral", "Sad", "Very Sad"]),
-  description: z
+  reflection: z
     .string()
-    .min(1, "Description is required")
-    .max(150, "Description must be less than 150 characters"),
+    .min(1, "Reflection is required")
+    .max(150, "Reflection must be less than 150 characters"),
   tags: z
     .array(z.string())
     .min(1, "At least one tag is required")
