@@ -7,7 +7,7 @@ const moodSchema = new mongoose.Schema(
       required: true,
       enum: ["Very Happy", "Happy", "Neutral", "Sad", "Very Sad"],
     },
-    description: {
+    reflection: {
       type: String,
       required: true,
     },

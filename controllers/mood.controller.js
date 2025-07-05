@@ -24,11 +24,11 @@ export const createMood = catchAsync(async (req, res, next) => {
     return next(AppError.handleValidationError(validationResult.error));
   }
 
-  const { mood, description, tags, sleepHours } = validationResult.data;
+  const { mood, reflection, tags, sleepHours } = validationResult.data;
 
   const newMood = await Mood.create({
     mood,
-    description,
+    reflection,
     tags,
     sleepHours,
   });

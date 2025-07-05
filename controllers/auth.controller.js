@@ -16,7 +16,7 @@ export const signToken = (id, res) => {
     maxAge: 90 * 24 * 60 * 60 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     domain:
       process.env.NODE_ENV === "production" ? ".shahzebabro.com" : undefined,
   });
@@ -155,8 +155,6 @@ export const changePassword = catchAsync(async (req, res, next) => {
 export const getMe = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.user._id).select("-password -__v");
 
-  console.log("User ", user);
-
   if (!user) {
     return next(new AppError("No such user exists", 404));
   }
@@ -172,7 +170,7 @@ export const logout = catchAsync(async (req, res, next) => {
     maxAge: 5 * 1000,
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
-    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
     domain:
       process.env.NODE_ENV === "production" ? ".shahzebabro.com" : undefined,
   });
