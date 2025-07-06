@@ -9,9 +9,25 @@ import {
   register,
   resetPassword,
   signToken,
+  updateUserDetails,
 } from "../controllers/auth.controller.js";
 import passport from "passport";
 import { authorize } from "../middlewares/authorize.js";
+import multer from "multer";
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "uploads/");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 50 * 1024 * 1024 },
+});
 
 const router = Router();
 
@@ -22,6 +38,12 @@ router.post("/reset-password/:token", resetPassword);
 router.post("/logout", logout);
 router.post("/change-password", authorize, changePassword);
 router.delete("/delete-me", authorize, deleteMe);
+router.post(
+  "/update-me",
+  authorize,
+  upload.single("avatar"),
+  updateUserDetails
+);
 
 router.get("/me", authorize, getMe);
 router.get(

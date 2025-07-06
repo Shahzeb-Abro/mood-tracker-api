@@ -6,6 +6,10 @@ import Email from "../utils/email.js";
 
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { storage } from "../utils/appWrite.js";
+import { ID } from "node-appwrite";
+import { InputFile } from "node-appwrite/file";
+import fs from "fs";
 
 export const signToken = (id, res) => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -201,5 +205,43 @@ export const deleteMe = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     message: "Account and all associated data have been deleted successfully",
+  });
+});
+
+export const updateUserDetails = catchAsync(async (req, res, next) => {
+  const { name } = req.body;
+  const avatar = req.file;
+
+  console.log("Avatar", avatar);
+  console.log("Name", name);
+
+  let fileUrl;
+  if (avatar) {
+    const appwriteRes = await storage.createFile(
+      process.env.APPWRITE_AVATAR_BUCKET_ID,
+      ID.unique(),
+      InputFile.fromPath(avatar.path, avatar.originalname)
+    );
+
+    const fileId = appwriteRes.$id;
+
+    fileUrl = `${process.env.APPWRITE_ENDPOINT}/storage/buckets/${process.env.APPWRITE_AVATAR_BUCKET_ID}/files/${fileId}/view?project=${process.env.APPWRITE_PROJECT_ID}`;
+
+    await fs.promises.unlink(avatar.path);
+  }
+
+  const user = await User.findById(req.user._id);
+  if (user?.name !== name) {
+    user.name = name;
+  }
+  if (user?.imgUrl !== fileUrl) {
+    user.imgUrl = fileUrl;
+  }
+  await user.save();
+
+  res.status(200).json({
+    status: "success",
+    message: "User details updated successfully",
+    data: user,
   });
 });
