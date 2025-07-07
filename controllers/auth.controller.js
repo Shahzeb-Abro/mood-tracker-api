@@ -234,7 +234,7 @@ export const updateUserDetails = catchAsync(async (req, res, next) => {
   if (user?.name !== name) {
     user.name = name;
   }
-  if (user?.imgUrl !== fileUrl) {
+  if (fileUrl && user?.imgUrl !== fileUrl) {
     user.imgUrl = fileUrl;
   }
   await user.save();
